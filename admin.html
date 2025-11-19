@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EMR Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a2e0e6b6e2.js" crossorigin="anonymous"></script>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3534/3534099.png">
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      font-family: 'Inter', sans-serif;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 1rem;
+    }
+    .btn {
+      background: linear-gradient(90deg, #06b6d4, #3b82f6);
+      color: white;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: linear-gradient(90deg, #3b82f6, #06b6d4);
+      transform: scale(1.03);
+    }
+    .fade {
+      animation: fadeIn 0.8s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="text-gray-100 min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside class="w-64 glass p-6 hidden md:block">
+    <h1 class="text-2xl font-bold mb-8 text-center text-teal-300">
+      <i class="fas fa-hospital-user mr-2"></i>EMR Admin
+    </h1>
+
+    <!-- 🔹 Added: Connect MetaMask Button -->
+    <div class="text-center mb-6">
+      <button id="connectAdminWallet" class="btn w-full py-2 mb-2">🔗 Connect MetaMask</button>
+      <p id="adminWalletAddress" class="text-xs text-gray-300 break-all"></p>
+      <p id="adminConnectMsg" class="text-sm mt-2"></p>
+    </div>
+
+    <nav class="space-y-3">
+      <button id="btnOverview" class="w-full text-left py-2 px-4 rounded hover:bg-teal-500 hover:text-white transition">🏠 Dashboard</button>
+      <button id="btnDoctors" class="w-full text-left py-2 px-4 rounded hover:bg-teal-500 hover:text-white transition">👨‍⚕️ Doctors</button>
+      <button id="btnPatients" class="w-full text-left py-2 px-4 rounded hover:bg-teal-500 hover:text-white transition">🧑‍🤝‍🧑 Patients</button>
+      <button id="btnRecords" class="w-full text-left py-2 px-4 rounded hover:bg-teal-500 hover:text-white transition">📜 Records</button>
+      <button id="btnTransferOwnership" class="w-full text-left py-2 px-4 rounded hover:bg-teal-500 hover:text-white transition">🔑 Transfer Ownership</button>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-6 fade">
+    <div id="overviewSection" class="fade">
+      <h2 class="text-3xl font-semibold mb-6">Admin Dashboard Overview</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="glass p-5">
+          <h3 class="text-xl font-semibold mb-2">Total Doctors</h3>
+          <p id="totalDoctors" class="text-4xl text-teal-400 font-bold">0</p>
+        </div>
+        <div class="glass p-5">
+          <h3 class="text-xl font-semibold mb-2">Total Patients</h3>
+          <p id="totalPatients" class="text-4xl text-teal-400 font-bold">0</p>
+        </div>
+        <div class="glass p-5">
+          <h3 class="text-xl font-semibold mb-2">Total Records</h3>
+          <p id="totalRecords" class="text-4xl text-teal-400 font-bold">0</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="doctorsSection" class="hidden fade">
+      <h2 class="text-3xl font-semibold mb-6">Registered Doctors</h2>
+      <div id="doctorList" class="space-y-4"></div>
+    </div>
+
+    <div id="patientsSection" class="hidden fade">
+      <h2 class="text-3xl font-semibold mb-6">Registered Patients</h2>
+      <div id="patientList" class="space-y-4"></div>
+    </div>
+
+    <div id="recordsSection" class="hidden fade">
+      <h2 class="text-3xl font-semibold mb-6">All Medical Records</h2>
+      <div id="recordList" class="space-y-4"></div>
+    </div>
+
+    <div id="ownershipSection" class="hidden fade">
+      <h2 class="text-3xl font-semibold mb-6">Transfer Contract Ownership</h2>
+      <div class="glass p-6 max-w-md">
+        <label class="block text-gray-300 mb-2">New Owner Address:</label>
+        <input id="newOwner" type="text" placeholder="0x..." class="w-full p-3 rounded bg-gray-800 text-white focus:ring focus:ring-teal-500 outline-none mb-4">
+        <button id="transferBtn" class="btn w-full py-3">Transfer Ownership</button>
+        <p id="transferMsg" class="text-sm mt-3"></p>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script src="./admin.js"></script>
+</body>
+</html>

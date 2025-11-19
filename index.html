@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EMR Portal – Doctor & Patient Interface</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a2e0e6b6e2.js" crossorigin="anonymous"></script>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/4320/4320337.png">
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      font-family: 'Inter', sans-serif;
+      color: #f1f5f9;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 1rem;
+    }
+    .btn {
+      background: linear-gradient(90deg, #06b6d4, #3b82f6);
+      color: white;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: linear-gradient(90deg, #3b82f6, #06b6d4);
+      transform: scale(1.03);
+    }
+    .fade {
+      animation: fadeIn 0.6s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center">
+
+  <!-- Landing Section -->
+  <section id="landing" class="text-center fade">
+    <div class="glass p-10 max-w-lg mx-auto">
+      <h1 class="text-3xl font-bold mb-4 text-teal-300">Electronic Medical Record System</h1>
+      <p class="text-gray-300 mb-6">Secure, decentralized management of medical records powered by Ethereum.</p>
+      <button id="doctorBtn" class="btn w-full py-3 mb-3"><i class="fas fa-user-md mr-2"></i>Doctor Portal</button>
+      <button id="patientBtn" class="btn w-full py-3"><i class="fas fa-user-injured mr-2"></i>Patient Portal</button>
+    </div>
+  </section>
+
+  <!-- Doctor Dashboard -->
+  <section id="doctorDashboard" class="hidden w-full p-6 fade">
+    <h2 class="text-3xl font-semibold text-center mb-8 text-teal-300">Doctor Dashboard</h2>
+
+    <!-- Connect Wallet -->
+    <div class="glass p-6 max-w-2xl mx-auto text-center mb-8">
+      <p id="doctorWalletStatus" class="text-sm text-gray-400">❌ Wallet not connected</p>
+      <button id="connectDoctorWallet" class="btn py-3 px-6">🔗 Connect MetaMask</button>
+      <div id="doctorConnectMsg"></div>
+    </div>
+
+    <!-- Register Doctor -->
+    <div class="glass p-6 max-w-2xl mx-auto mb-8">
+      <h3 class="text-xl font-semibold mb-4">👨‍⚕️ Register as Doctor</h3>
+      <input id="doctorName" type="text" placeholder="Full Name" class="w-full mb-3 p-3 rounded bg-gray-800 text-white focus:ring focus:ring-teal-500 outline-none" disabled>
+      <input id="doctorSpec" type="text" placeholder="Specialization" class="w-full mb-3 p-3 rounded bg-gray-800 text-white focus:ring focus:ring-teal-500 outline-none" disabled>
+      <button id="registerDoctorBtn" class="btn w-full py-3 disabled">Register Doctor</button>
+      <div id="doctorMessage"></div>
+    </div>
+
+    <!-- Create Record -->
+    <div class="glass p-6 max-w-2xl mx-auto mb-8">
+      <h3 class="text-xl font-semibold mb-4">🩺 Create Medical Record</h3>
+      <input id="recordPatientAddr" type="text" placeholder="Patient Address (0x...)" class="w-full mb-3 p-3 rounded bg-gray-800 text-white" disabled>
+      <input id="recordDiagnosis" type="text" placeholder="Diagnosis" class="w-full mb-3 p-3 rounded bg-gray-800 text-white" disabled>
+      <input id="recordTreatment" type="text" placeholder="Treatment" class="w-full mb-3 p-3 rounded bg-gray-800 text-white" disabled>
+      <input id="recordDate" type="text" placeholder="Date of Visit (e.g. 2025-10-26)" class="w-full mb-3 p-3 rounded bg-gray-800 text-white" disabled>
+      <input id="recordIPFS" type="text" placeholder="Optional IPFS Hash" class="w-full mb-3 p-3 rounded bg-gray-800 text-white" disabled>
+      <button id="createRecordBtn" class="btn w-full py-3 disabled">Create Record</button>
+      <div id="recordMessage"></div>
+    </div>
+
+    <!-- View Record -->
+    <div class="glass p-6 max-w-2xl mx-auto">
+      <h3 class="text-xl font-semibold mb-4">📜 View Record</h3>
+      <input id="viewRecordId" type="number" placeholder="Record ID" class="w-full mb-3 p-3 rounded bg-gray-800 text-white" disabled>
+      <button id="viewRecordBtn" class="btn w-full py-3 disabled">View Record Details</button>
+      <pre id="recordDetails" class="mt-4 text-sm text-gray-300 whitespace-pre-wrap"></pre>
+    </div>
+
+    <div class="text-center mt-10">
+      <button class="text-gray-400 underline" id="backToLanding1">← Back to Role Selection</button>
+    </div>
+  </section>
+
+  <!-- Patient Dashboard -->
+  <section id="patientDashboard" class="hidden w-full p-6 fade">
+    <h2 class="text-3xl font-semibold text-center mb-8 text-teal-300">Patient Dashboard</h2>
+
+    <!-- Connect Wallet -->
+    <div class="glass p-6 max-w-2xl mx-auto text-center mb-8">
+      <p id="patientWalletStatus" class="mb-3 text-gray-300">Wallet not connected</p>
+      <button id="connectPatientWallet" class="btn py-3 px-6">🔗 Connect MetaMask</button>
+      <div id="patientConnectMsg"></div>
+    </div>
+
+    <!-- Register Patient -->
+    <div class="glass p-6 max-w-2xl mx-auto mb-8">
+      <h3 class="text-xl font-semibold mb-4">🧍 Register as Patient</h3>
+      <input id="patientName" type="text" placeholder="Full Name" class="w-full mb-3 p-3 rounded bg-gray-800 text-white" disabled>
+      <button id="registerPatientBtn" class="btn w-full py-3 disabled">Register Patient</button>
+      <div id="patientMessage"></div>
+    </div>
+
+    <!-- View Own Records -->
+    <div class="glass p-6 max-w-2xl mx-auto mb-8">
+      <h3 class="text-xl font-semibold mb-4">📂 View My Records</h3>
+      <button id="viewMyRecordsBtn" class="btn w-full py-3 disabled">Fetch Records</button>
+      <div id="myRecordsList" class="mt-4 space-y-3"></div>
+    </div>
+
+    <!-- Manage Access -->
+    <div class="glass p-6 max-w-2xl mx-auto">
+      <h3 class="text-xl font-semibold mb-4">🔑 Manage Access Permissions</h3>
+      <input id="viewerAddr" type="text" placeholder="Viewer Address (0x...)" class="w-full mb-3 p-3 rounded bg-gray-800 text-white" disabled>
+      <div class="flex gap-4">
+        <button id="grantAccessBtn" class="btn flex-1 py-3 disabled">Grant Access</button>
+        <button id="revokeAccessBtn" class="btn flex-1 py-3 bg-red-500 hover:bg-red-600 disabled">Revoke Access</button>
+      </div>
+    </div>
+
+    <div class="text-center mt-10">
+      <button class="text-gray-400 underline" id="backToLanding2">← Back to Role Selection</button>
+    </div>
+  </section>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
