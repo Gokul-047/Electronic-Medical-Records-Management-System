@@ -13,7 +13,7 @@ The project demonstrates how blockchain can be used to securely register users (
 ![Doctor Portal](./images/Doctor.png)
 
 ### Patient Portal
-![Patient Portal](./images/Patient portal.png)
+![Patient Portal](./images/Patient_portal.png)
 
 ### Admin Panel
 ![Admin Panel](./images/Admin_page.png)
